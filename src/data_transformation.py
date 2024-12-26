@@ -35,7 +35,7 @@ def generate_time_series_report():
     df = read_from_table("silver_transactions")
 
     print(df['transaction_date'].dtypes)
-    df['transaction_date'] = pd.to_datetime(df['transaction_date'])  # Asegurar formato de fecha.
+    df['transaction_date'] = pd.to_datetime(df['transaction_date'])
     daily_sales = df.groupby(df['transaction_date'].dt.date)['total_amount'].sum().reset_index()
 
     daily_sales.rename(columns={"transaction_date": "date", "total_amount": "daily_sales"}, inplace=True)

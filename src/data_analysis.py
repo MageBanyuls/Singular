@@ -46,12 +46,20 @@ def retention_analysis():
     """
     df = read_from_table("silver_transactions")
 
+
     user_purchase_counts = df.groupby('user_id', as_index=False)['transaction_id'].count()
+    print(user_purchase_counts.head(10))
+
     user_purchase_counts.rename(columns={'transaction_id': 'purchase_count'}, inplace=True)
 
     
     multiple_purchasers = user_purchase_counts[user_purchase_counts['purchase_count'] > 1]
-    retention_rate = len(multiple_purchasers) / len(user_purchase_counts) * 100
+
+    if len(user_purchase_counts) > 0:
+        retention_rate = round(len(multiple_purchasers) / len(user_purchase_counts) * 100)
+    else:
+        retention_rate = 0
+
 
     retention_data = pd.DataFrame({
         "total_users": [len(user_purchase_counts)],
